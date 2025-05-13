@@ -1,20 +1,20 @@
 import { redirect } from "next/navigation";
 import { comments } from "../faker/data";
 
-type props = {
-  params: {
-    id: string;
-  };
-};
-
-export async function GET(_request: Request, { params }: props) {
-  const { id } = params;
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const comment = comments.find((comment) => comment.id.toString() === id);
 
   return comment ? Response.json(comment) : redirect("/comments/api");
 }
 
-export async function PATCH(request: Request, { params }: props) {
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const { id } = await params;
   const body = await request.json();
   const { text } = body;
@@ -29,7 +29,10 @@ export async function PATCH(request: Request, { params }: props) {
   return Response.json(comments[index]);
 }
 
-export async function DELETE(_request: Request, { params }: props) {
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const { id } = await params;
   let deletedComment = {};
   const index = comments.findIndex((comment) => comment.id.toString() === id);
