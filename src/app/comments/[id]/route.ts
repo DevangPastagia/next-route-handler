@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { comments } from "../faker/data";
 
 type props = {
@@ -9,9 +10,8 @@ type props = {
 export async function GET(_request: Request, { params }: props) {
   const { id } = params;
   const comment = comments.find((comment) => comment.id.toString() === id);
-  return comment
-    ? Response.json(comment)
-    : Response.json({ error: "Comment not found" }, { status: 404 });
+
+  return comment ? Response.json(comment) : redirect("/comments/api");
 }
 
 export async function PATCH(request: Request, { params }: props) {
