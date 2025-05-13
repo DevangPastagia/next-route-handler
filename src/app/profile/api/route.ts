@@ -4,12 +4,18 @@ import { headers } from "next/headers";
 export async function GET(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   const headerList = await headers();
+
+  // Get cookies
+  const theme = request.cookies.get("theme");
+
   console.log("Request Headers:", requestHeaders.get("Authorization"));
   console.log("Header List:", headerList.get("Authorization"));
+  console.log("Theme Cookie:", theme);
 
   return new Response("<h1>Hello from the profile API</h1>", {
     headers: {
       "Content-Type": "text/html",
+      "set-Cookie": "theme=dark",
     },
   });
 }
